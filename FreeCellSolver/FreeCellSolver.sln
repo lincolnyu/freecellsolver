@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCellSolverConsole", "FreeCellSolver\FreeCellSolverConsole.csproj", "{9855D936-FF73-48CD-BA03-BA6A8AA72ADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGames", "CardGames\CardGames.csproj", "{2ED5A91C-1C57-4371-A251-24771876CDE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGameSolvers", "CardGameSolvers\CardGameSolvers.csproj", "{F9623AD1-A5D3-48AD-BE20-E469589DDA98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9855D936-FF73-48CD-BA03-BA6A8AA72ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9855D936-FF73-48CD-BA03-BA6A8AA72ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9855D936-FF73-48CD-BA03-BA6A8AA72ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9855D936-FF73-48CD-BA03-BA6A8AA72ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED5A91C-1C57-4371-A251-24771876CDE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED5A91C-1C57-4371-A251-24771876CDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ED5A91C-1C57-4371-A251-24771876CDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED5A91C-1C57-4371-A251-24771876CDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9623AD1-A5D3-48AD-BE20-E469589DDA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9623AD1-A5D3-48AD-BE20-E469589DDA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9623AD1-A5D3-48AD-BE20-E469589DDA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9623AD1-A5D3-48AD-BE20-E469589DDA98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
