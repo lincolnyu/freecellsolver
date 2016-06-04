@@ -60,56 +60,78 @@ namespace FreeCellSolverConsole
             solver.Solve(state, winmap);
             var t2 = DateTime.UtcNow;
             Console.WriteLine("Solving completed, taking {0}.", t2-t1);
-            while (!state.IsTerminated)
+            var toContinue = true;
+            while (toContinue)
             {
-                if (state.NextPlayer == cpucolor)
+                while (!state.IsTerminated)
                 {
-                    Console.WriteLine("Computer moving ...");
-                    var steps = state.PlayToWin(winmap);
-                    if (steps >= 0)
+                    if (state.NextPlayer == cpucolor)
                     {
-                        Console.WriteLine($"Computer is bound to win in {steps} step(s)");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Your turn ...");
-                    while (true)
-                    {
-                        try
+                        Console.WriteLine("Computer moving ...");
+                        var steps = state.PlayToWin(winmap);
+                        if (steps >= 0)
                         {
-                            var line = Console.ReadLine();
-                            var s = line.Split(',');
-                            var row = int.Parse(s[0])-1;
-                            var col = int.Parse(s[1])-1;
-                            var m = new Move(row, col);
-                            if (state[row,col] != GoSnapshot.PointStates.None)
+                            Console.WriteLine($"Computer is bound to win in {steps} step(s)");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your turn ...");
+                        while (true)
+                        {
+                            try
                             {
-                                Console.WriteLine("Can't place the stone here");
-                                continue;
+                                var line = Console.ReadLine();
+                                var s = line.Split(',');
+                                var row = int.Parse(s[0]) - 1;
+                                var col = int.Parse(s[1]) - 1;
+                                var m = new Move(row, col);
+                                if (state[row, col] != GoSnapshot.PointStates.None)
+                                {
+                                    Console.WriteLine("Can't place the stone here");
+                                    continue;
+                                }
+                                m.Redo(state);
+                                break;
                             }
-                            m.Redo(state);
-                            break;
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine("Something wrong with your input, try again ...");
+                            catch (Exception)
+                            {
+                                Console.WriteLine("Something wrong with your input, try again ...");
+                            }
                         }
                     }
+                    var board = state.ConvertToDisplayString();
+                    Console.WriteLine(board);
                 }
-                var board = state.ConvertToDisplayString();
-                Console.WriteLine(board);
-            }
-            if (state.IsWin)
-            {
-                if (state.NextPlayer == cpucolor)
-                    Console.WriteLine("You won.");
+                if (state.IsWin)
+                {
+                    if (state.NextPlayer == cpucolor)
+                        Console.WriteLine("You won.");
+                    else
+                        Console.WriteLine("Computer won.");
+                }
                 else
-                    Console.WriteLine("Computer won.");
-            }
-            else
-            {
-                Console.WriteLine("Tie.");
+                {
+                    Console.WriteLine("Tie.");
+                }
+                var validInput = false;
+                while (!validInput)
+                {
+                    Console.Write("Continue playing? (Y/N)");
+                    var g = (char)Console.ReadKey().Key;
+                    if (g == 'N' || g == 'n')
+                    {
+                        toContinue = false;
+                        validInput = true;
+                    }
+                    else if (g == 'Y' || g == 'y')
+                    {
+                        state.Reset();
+                        state.NextPlayer = ((GoSnapshot)state).DeduceCurrentPlayer();
+                        validInput = true;
+                    }
+                    Console.WriteLine();
+                }
             }
         }
 
@@ -126,7 +148,7 @@ namespace FreeCellSolverConsole
 
         static void Main()
         {
-            InteractiveGobang(4,4,3,true);
+            InteractiveGobang(3,3,3,true);
             //SolveGobang();
         }
     }

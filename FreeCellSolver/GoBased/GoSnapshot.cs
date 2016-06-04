@@ -80,5 +80,13 @@
             }
             return clone;
         }
+
+        protected void Clear()
+        {
+            for (var i = 0; i < EncodedBoard.Length; i++)
+            {
+                EncodedBoard[i] = 0;
+            }
+        }
     }
 }

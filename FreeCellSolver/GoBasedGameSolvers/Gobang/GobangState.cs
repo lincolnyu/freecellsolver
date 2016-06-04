@@ -10,7 +10,7 @@ namespace GoBasedGameSolvers.Gobang
             NumToWin = numToWin;
             NumCols = numCols;
             NumRows = numRows;
-            InitPossibleMoves();
+            ResetPossibleMoves();
         }
 
         public PointStates NextPlayer { get; set; }
@@ -27,6 +27,7 @@ namespace GoBasedGameSolvers.Gobang
             get; private set;
         }
 
+        // TODO smarter tie
         // currently only check if it's full
         public bool IsTie => Count == NumCols * NumRows;
 
@@ -120,8 +121,9 @@ namespace GoBasedGameSolvers.Gobang
             }
         }
         
-        private void InitPossibleMoves()
+        private void ResetPossibleMoves()
         {
+            PossibleMoves.Clear();
             for (var i = 0; i < NumRows; i++)
             {
                 for (var j = 0; j < NumCols; j++)
@@ -129,6 +131,14 @@ namespace GoBasedGameSolvers.Gobang
                     PossibleMoves.Add(new Move(i, j));
                 }
             }
+        }
+
+        public void Reset()
+        {
+            IsWin = false;
+            Count = 0;
+            Clear();
+            ResetPossibleMoves();
         }
     }
 }
