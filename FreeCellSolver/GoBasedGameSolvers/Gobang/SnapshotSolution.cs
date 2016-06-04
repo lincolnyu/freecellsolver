@@ -22,5 +22,9 @@ namespace GoBasedGameSolvers.Gobang
         ///  moves that lead to DL states (lose)
         /// </summary>
         public List<Move> LoseMoves { get; } = new List<Move>();
+
+        public int MinWinLength;
+
+        public int MinWinChoice;
     }
 }

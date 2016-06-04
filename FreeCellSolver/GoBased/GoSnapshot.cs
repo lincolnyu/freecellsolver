@@ -9,12 +9,14 @@
             White
         }
 
-        public readonly byte[] EncodedBoard;
-
         public GoSnapshot(int totalBytes)
         {
             EncodedBoard = new byte[totalBytes];
         }
+
+        public byte[] EncodedBoard { get; }
+
+        public int TotalBytes => EncodedBoard.Length;
 
         public static int GetTotalBytes(int totalPoints)
         {

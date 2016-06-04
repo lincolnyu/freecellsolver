@@ -1,4 +1,5 @@
 ﻿using GoBased;
+using System.Text;
 
 namespace GoBasedGameSolvers.Gobang.Helpers
 {
@@ -56,6 +57,40 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             {
                 state.NextPlayer = state.NextPlayer.GetOpponent();
             }
+        }
+
+        public static string ConvertToDisplayString(this GobangState state)
+        {
+            var sb = new StringBuilder();
+            for (var i = 0; i < state.NumRows; i++)
+            {
+                for (var j = 0; j < state.NumCols; j++)
+                {
+                    var s = state[i, j];
+                    switch (s)
+                    {
+                        case GoSnapshot.PointStates.Black:
+                            sb.Append('X');
+                            break;
+                        case GoSnapshot.PointStates.White:
+                            sb.Append('O');
+                            break;
+                        default:
+                            sb.Append(' ');
+                            break;
+                    }
+                    if (j < state.NumCols - 1)
+                    {
+                        sb.Append('|');
+                    }
+                }
+                if (i < state.NumRows-1)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine(new string('-', state.NumCols * 2 - 1));
+                }
+            }
+            return sb.ToString();
         }
     }
 }

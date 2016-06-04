@@ -48,9 +48,55 @@ namespace FreeCellSolverConsole
             }
         }
 
-        static void SolveGoBang3x3()
+        static void InteractiveGoBang4x4()
         {
-            var state = new GobangState(4,4,3);
+            var state = new GobangState(4, 4, 3);
+            state.NextPlayer = ((GoSnapshot)state).DeduceCurrentPlayer();
+            var solver = new GobangSolver();
+            var winmap = new Dictionary<GoSnapshot, SnapshotSolution>();
+            Console.WriteLine("Computer solving ...");
+            var t1 = DateTime.UtcNow;
+            solver.Solve(state, winmap);
+            var t2 = DateTime.UtcNow;
+            Console.WriteLine("Solving completed, taking {0}.", t2-t1);
+            while (!state.IsTerminated)
+            {
+                if (state.NextPlayer == GoSnapshot.PointStates.Black)
+                {
+                    Console.WriteLine("Computer moving ...");
+                    var steps = state.PlayToWin(winmap);
+                    Console.WriteLine($"Computer is bound to win in {steps} step(s)");
+                }
+                else
+                {
+                    Console.WriteLine("Your turn ...");
+                    while (true)
+                    {
+                        try
+                        {
+                            var line = Console.ReadLine();
+                            var s = line.Split(',');
+                            var row = int.Parse(s[0])-1;
+                            var col = int.Parse(s[1])-1;
+                            var m = new Move(row, col);
+                            m.Redo(state);
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Something wrong with your input, try again ...");
+                        }
+                    }
+                   
+                }
+                var board = state.ConvertToDisplayString();
+                Console.WriteLine(board);
+            }
+        }
+
+        static void SolveGoBang4x4()
+        {
+            var state = new GobangState(4,4,4);
             state.NextPlayer = ((GoSnapshot)state).DeduceCurrentPlayer();
             var solver = new GobangSolver();
             var winmap = new Dictionary<GoSnapshot, SnapshotSolution>();
@@ -61,7 +107,8 @@ namespace FreeCellSolverConsole
 
         static void Main()
         {
-            SolveGoBang3x3();
+            InteractiveGoBang4x4();
+            //SolveGoBang4x4();
         }
     }
 }

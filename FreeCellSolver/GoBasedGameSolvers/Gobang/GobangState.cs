@@ -1,6 +1,5 @@
 ﻿using GoBased;
 using System.Collections.Generic;
-using System;
 
 namespace GoBasedGameSolvers.Gobang
 {
@@ -28,14 +27,10 @@ namespace GoBasedGameSolvers.Gobang
             get; private set;
         }
 
-        public bool IsTie
-        {
-            get
-            {
-                // currently only check if it's full
-                return Count == NumCols * NumRows;
-            }
-        }
+        // currently only check if it's full
+        public bool IsTie => Count == NumCols * NumRows;
+
+        public bool IsTerminated => IsWin || IsTie;
 
         public PointStates this[int row, int col]
         {

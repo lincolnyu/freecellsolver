@@ -1,4 +1,6 @@
 ﻿using GoBased;
+using GoBased.Helpers;
+using GoBasedGameSolvers.Gobang.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,15 +18,15 @@ namespace GoBasedGameSolvers.Gobang
         /// <remarks>
         ///  See Solve() for detail
         /// </remarks>
-        private SnapshotSolution.StateTypes GetStateType(GobangState state, Dictionary<GoSnapshot, SnapshotSolution> winmap)
+        private SnapshotSolution GetSolution(GobangState state, Dictionary<GoSnapshot, SnapshotSolution> winmap)
         {
             SnapshotSolution mls;
             if (winmap.TryGetValue(state, out mls))
             {
-                return mls.StateType;
+                return mls;
             }
             Solve(state, winmap);
-            return winmap[state].StateType;
+            return winmap[state];
         }
 
         /// <summary>
@@ -52,39 +54,54 @@ namespace GoBasedGameSolvers.Gobang
         /// </remarks>
         public void Solve(GobangState state, Dictionary<GoSnapshot, SnapshotSolution> winmap)
         {
-            var mls = new SnapshotSolution(); // default type being GO
+            var ss = new SnapshotSolution(); // default type being GO
             if (state.IsWin)
             {
-                mls.StateType = SnapshotSolution.StateTypes.GW;
-                winmap[state.Clone()] = mls;
+                ss.StateType = SnapshotSolution.StateTypes.GW;
+                winmap[state.Clone()] = ss;
+                ss.MinWinLength = 0;
                 return;
             }
             if (state.IsTie)
             {
-                mls.StateType = SnapshotSolution.StateTypes.GO;
-                winmap[state.Clone()] = mls;
+                ss.StateType = SnapshotSolution.StateTypes.GO;
+                winmap[state.Clone()] = ss;
                 return;
             }
             var moves = state.PossibleMoves.ToList();
             var isGW = true;
+            var minWinLength = int.MaxValue;
+            var minWinChoice = -1;
+            var maxWinLengthForOppo = int.MinValue;
             // go through all possible moves of the next player
             foreach (var move in moves)
             {
                 move.Redo(state);
-                var st = GetStateType(state, winmap);
+                var sol = GetSolution(state, winmap);
+                var st = sol.StateType;
                 switch (st)
                 {
                     case SnapshotSolution.StateTypes.GW:
+                        if (sol.MinWinLength < minWinLength)
+                        {
+                            minWinLength = sol.MinWinLength;
+                            minWinChoice = ss.WinMoves.Count;
+                        }
                         // this move leads to GW for the moving player
-                        // this means it's a DL for the current
-                        mls.StateType = SnapshotSolution.StateTypes.DL;
-                        mls.WinMoves.Add(move);
+                        // this means it's a DL for the moved
+                        ss.StateType = SnapshotSolution.StateTypes.DL;
+                        ss.WinMoves.Add(move);
                         isGW = false;
                         break;
                     case SnapshotSolution.StateTypes.DL:
                         // if all moves are like this, it means
                         // it's a GW for the moved
-                        mls.LoseMoves.Add(move);
+                        ss.LoseMoves.Add(move);
+                        // choose the longest for the opponent
+                        if (sol.MinWinLength > maxWinLengthForOppo)
+                        {
+                            maxWinLengthForOppo = sol.MinWinLength;
+                        }
                         break;
                     default: // GO
                         isGW = false;
@@ -94,9 +111,53 @@ namespace GoBasedGameSolvers.Gobang
             }
             if (isGW)
             {
-                mls.StateType = SnapshotSolution.StateTypes.GW;
+                ss.StateType = SnapshotSolution.StateTypes.GW;
+                ss.MinWinLength = maxWinLengthForOppo + 1;
             }
-            winmap[state.Clone()] = mls;
+            if (ss.StateType == SnapshotSolution.StateTypes.DL)
+            {
+                ss.MinWinLength = minWinLength + 1;
+                ss.MinWinChoice = minWinChoice;
+            }
+
+            UpdateWinMap(winmap, state, ss);
+        }
+
+        private void UpdateWinMap(Dictionary<GoSnapshot, SnapshotSolution> winmap, GobangState gbs, SnapshotSolution ss)
+        {
+            var gc = gbs.Clone();
+            winmap[gc] = ss;
+
+            var h = gc.FlipHori(gbs.NumRows, gbs.NumCols);
+            var hss = ss.FlipHori(gbs.NumCols);
+            winmap[h] = hss;
+
+            var v = gc.FlipVert(gbs.NumRows, gbs.NumCols);
+            var vss = ss.FlipVert(gbs.NumCols);
+            winmap[v] = vss;
+
+            var hv = h.FlipVert(gbs.NumRows, gbs.NumCols);
+            var hvss = hss.FlipVert(gbs.NumCols);
+            winmap[hv] = hvss;
+
+            if (gbs.NumRows == gbs.NumCols)
+            {
+                var t = gc.Transpose(gbs.NumRows);
+                var tss = ss.Transpose(gbs.NumRows);
+                winmap[t] = tss;
+                
+                var hvt = hv.Transpose(gbs.NumRows);
+                var hvtss = hvss.Transpose(gbs.NumRows);
+                winmap[hvt] = hvtss;
+
+                var ht = h.Transpose(gbs.NumRows);
+                var htss = hss.Transpose(gbs.NumRows);
+                winmap[ht] = htss;
+
+                var vt = v.Transpose(gbs.NumRows);
+                var vtss = vss.Transpose(gbs.NumRows);
+                winmap[vt] = vtss;
+            }
         }
     }
 }

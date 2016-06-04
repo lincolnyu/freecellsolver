@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gobang\GobangState.cs" />
+    <Compile Include="Gobang\Helpers\GobangHelper.cs" />
     <Compile Include="Gobang\Helpers\GoStateHelper.cs" />
+    <Compile Include="Gobang\Helpers\SolutionHelper.cs" />
     <Compile Include="Gobang\Move.cs" />
     <Compile Include="Gobang\SnapshotSolution.cs" />
     <Compile Include="Gobang\Solver.cs" />
