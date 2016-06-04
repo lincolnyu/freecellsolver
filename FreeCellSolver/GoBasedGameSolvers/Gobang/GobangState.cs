@@ -49,12 +49,14 @@ namespace GoBasedGameSolvers.Gobang
                 var move = new Move(row, col);
                 if (value == PointStates.None)
                 {
+                    // assuming the removed one is always the one that caused the one
                     IsWin = false;
                     PossibleMoves.Add(move);
                     Count--;
                 }
                 else
                 {
+                    // assuming wasn't in win state
                     UpdateIsWin(row, col, value);
                     PossibleMoves.Remove(move);
                     Count++;

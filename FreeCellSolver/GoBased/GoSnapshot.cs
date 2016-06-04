@@ -24,9 +24,9 @@
 
         public PointStates GetPoint(int row, int col, int numcols)
         {
-            var i = row * numcols + col;
-            var bytep = i / 4;
-            var bitp = i % 4;
+            var offset = row * numcols + col;
+            var bytep = offset / 4;
+            var bitp = offset % 4;
             var b = EncodedBoard[bytep];
             b >>= bitp * 2;
             b &= 0x3;
@@ -35,12 +35,7 @@
 
         public void SetPoint(int row, int col, int numcols, PointStates val)
         {
-            var i = row * numcols + col;
-            SetPoint(i, val);
-        }
-
-        public void SetPoint(int offset, PointStates val)
-        {
+            var offset = row * numcols + col;
             var bytep = offset / 4;
             var bitp = offset % 4;
             var b = EncodedBoard[bytep];

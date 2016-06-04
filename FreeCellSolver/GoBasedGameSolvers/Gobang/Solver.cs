@@ -56,13 +56,13 @@ namespace GoBasedGameSolvers.Gobang
             if (state.IsWin)
             {
                 mls.StateType = SnapshotSolution.StateTypes.GW;
-                winmap[state] = mls;
+                winmap[state.Clone()] = mls;
                 return;
             }
             if (state.IsTie)
             {
                 mls.StateType = SnapshotSolution.StateTypes.GO;
-                winmap[state] = mls;
+                winmap[state.Clone()] = mls;
                 return;
             }
             var moves = state.PossibleMoves.ToList();
@@ -96,7 +96,7 @@ namespace GoBasedGameSolvers.Gobang
             {
                 mls.StateType = SnapshotSolution.StateTypes.GW;
             }
-            winmap[state] = mls;
+            winmap[state.Clone()] = mls;
         }
     }
 }
