@@ -23,8 +23,16 @@ namespace GoBasedGameSolvers.Gobang
         /// </summary>
         public List<Move> LoseMoves { get; } = new List<Move>();
 
+        /// <summary>
+        ///  Max steps towards a win the state is GW or DL
+        /// </summary>
         public int MinWinLength;
 
+        /// <summary>
+        ///  For DL it's the choice to take to ensure the above length
+        ///  For GW it's the best choice to delay the opponent's victory
+        ///   (which also complies with the above length)
+        /// </summary>
         public int MinWinChoice;
     }
 }

@@ -94,14 +94,15 @@ namespace GoBasedGameSolvers.Gobang
                         isGW = false;
                         break;
                     case SnapshotSolution.StateTypes.DL:
-                        // if all moves are like this, it means
-                        // it's a GW for the moved
-                        ss.LoseMoves.Add(move);
                         // choose the longest for the opponent
                         if (sol.MinWinLength > maxWinLengthForOppo)
                         {
+                            minWinChoice = ss.LoseMoves.Count;
                             maxWinLengthForOppo = sol.MinWinLength;
                         }
+                        // if all moves are like this, it means
+                        // it's a GW for the moved
+                        ss.LoseMoves.Add(move);
                         break;
                     default: // GO
                         isGW = false;
@@ -113,8 +114,9 @@ namespace GoBasedGameSolvers.Gobang
             {
                 ss.StateType = SnapshotSolution.StateTypes.GW;
                 ss.MinWinLength = maxWinLengthForOppo + 1;
+                ss.MinWinChoice = minWinChoice;
             }
-            if (ss.StateType == SnapshotSolution.StateTypes.DL)
+            else if (ss.StateType == SnapshotSolution.StateTypes.DL)
             {
                 ss.MinWinLength = minWinLength + 1;
                 ss.MinWinChoice = minWinChoice;
