@@ -13,19 +13,19 @@ namespace CardGameSolvers.FreeCell.Helpers
 
         public static int[] RedSlots =
         {
-            (int)Card.Types.Heart,
-            (int)Card.Types.Diamond
+            (int)Card.Suits.Heart,
+            (int)Card.Suits.Diamond
         };
 
         public static int[] BlackSlots =
         {
-            (int)Card.Types.Spade,
-            (int)Card.Types.Club
+            (int)Card.Suits.Spade,
+            (int)Card.Suits.Club
         };
 
         public static int GetDeckIndex(this Card card)
         {
-            return (int)card.CardType;
+            return (int)card.Suit;
         }
 
         public static CardColors GetColor(this Card card)
@@ -42,7 +42,7 @@ namespace CardGameSolvers.FreeCell.Helpers
         
         public static int Compare(Card a, Card b)
         {
-            var c = a.CardType.CompareTo(b.CardType);
+            var c = a.Suit.CompareTo(b.Suit);
             if (c != 0)
             {
                 return c;
@@ -85,7 +85,7 @@ namespace CardGameSolvers.FreeCell.Helpers
             {
                 var p = new Card
                 {
-                    CardType = card.CardType,
+                    Suit = card.Suit,
                     Number = (Card.Numbers)((int)card.Number - 1)
                 };
                 return p;
@@ -102,7 +102,7 @@ namespace CardGameSolvers.FreeCell.Helpers
             {
                 var p = new Card
                 {
-                    CardType = card.CardType,
+                    Suit = card.Suit,
                     Number = (Card.Numbers)((int)card.Number + 1)
                 };
                 return p;
@@ -115,16 +115,16 @@ namespace CardGameSolvers.FreeCell.Helpers
             switch (c)
             {
                 case '^':
-                    card.CardType = Card.Types.Diamond;
+                    card.Suit = Card.Suits.Diamond;
                     break;
                 case '@':
-                    card.CardType = Card.Types.Heart;
+                    card.Suit = Card.Suits.Heart;
                     break;
                 case '*':
-                    card.CardType = Card.Types.Club;
+                    card.Suit = Card.Suits.Club;
                     break;
                 case '$':
-                    card.CardType = Card.Types.Spade;
+                    card.Suit = Card.Suits.Spade;
                     break;
             }
             var s = str.Substring(1).Trim().ToUpper();
@@ -156,18 +156,18 @@ namespace CardGameSolvers.FreeCell.Helpers
         public static string ConvertToString(this Card card)
         {
             var res = "";
-            switch (card.CardType)
+            switch (card.Suit)
             {
-                case Card.Types.Diamond:
+                case Card.Suits.Diamond:
                     res = "^";
                     break;
-                case Card.Types.Heart:
+                case Card.Suits.Heart:
                     res = "@";
                     break;
-                case Card.Types.Club:
+                case Card.Suits.Club:
                     res = "*";
                     break;
-                case Card.Types.Spade:
+                case Card.Suits.Spade:
                     res = "$";
                     break;
             }

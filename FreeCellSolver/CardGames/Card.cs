@@ -4,7 +4,7 @@ namespace CardGames
 {
     public class Card : IEquatable<Card>
     {
-        public enum Types
+        public enum Suits
         {
             JokerMajor = -2,
             JokerMinor = -1,
@@ -32,17 +32,17 @@ namespace CardGames
             King = 13
         }
 
-        public Types CardType { get; set; }
+        public Suits Suit { get; set; }
 
         public Numbers Number { get; set; }
 
-        public bool IsRed => CardType == Types.Heart || CardType == Types.Diamond;
+        public bool IsRed => Suit == Suits.Heart || Suit == Suits.Diamond;
 
-        public bool IsBlack => CardType == Types.Spade || CardType == Types.Club;
+        public bool IsBlack => Suit == Suits.Spade || Suit == Suits.Club;
 
         public bool Equals(Card other)
         {
-            return CardType == other.CardType && Number == other.Number;
+            return Suit == other.Suit && Number == other.Number;
         }
 
         public override bool Equals(object obj)
@@ -54,7 +54,7 @@ namespace CardGames
 
         public override int GetHashCode()
         {
-            return (int)CardType * 13 + (int)Number;
+            return (int)Suit * 13 + (int)Number;
         }
     }
 }

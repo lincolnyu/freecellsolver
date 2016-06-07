@@ -84,7 +84,7 @@ namespace CardGameSolvers.FreeCell.Helpers
                     var c = new Card();
                     c.ConvertFromString(s);
                     var cb = new Card();
-                    cb.CardType = c.CardType;
+                    cb.Suit = c.Suit;
                     do
                     {
                         state.PushDeck(cb);
