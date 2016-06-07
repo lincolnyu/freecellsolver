@@ -1,5 +1,6 @@
 ﻿using GoBased;
 using System.Collections.Generic;
+using GoBasedGameSolvers.Gobang.Helpers;
 
 namespace GoBasedGameSolvers.Gobang
 {
@@ -11,6 +12,7 @@ namespace GoBasedGameSolvers.Gobang
             NumCols = numCols;
             NumRows = numRows;
             ResetPossibleMoves();
+            Liveness = new int[numRows, numCols, 4];
         }
 
         public PointStates NextPlayer { get; set; }
@@ -22,14 +24,18 @@ namespace GoBasedGameSolvers.Gobang
 
         public int Count { get; private set; }
 
+        public int[,,] Liveness { get; }
+        public int AliveCount { get; set; }
+
         public bool IsWin
         {
             get; private set;
         }
 
-        // TODO smarter tie
-        // currently only check if it's full
-        public bool IsTie => Count == NumCols * NumRows;
+        public bool IsTie
+        {
+            get; private set;
+        }
 
         public bool IsTerminated => IsWin || IsTie;
 
@@ -45,22 +51,49 @@ namespace GoBasedGameSolvers.Gobang
                 var move = new Move(row, col);
                 if (value == PointStates.None)
                 {
+                    var oldVal = GetPoint(row, col, NumCols);
                     // assuming the removed one is always the one that caused the one
+                    // as we don't move any further once either of these terminal
+                    // situations is reached
                     IsWin = false;
+                    IsTie = false;
                     PossibleMoves.Add(move);
                     Count--;
                 }
                 else
                 {
                     // assuming wasn't in win state
+                    SetPoint(row, col, NumCols, value);
                     UpdateIsWin(row, col, value);
+                    UpdateIsTie(row, col, PointStates.None, value);
                     PossibleMoves.Remove(move);
                     Count++;
                 }
+                // this is done at the end, at the moment there should be no issue
+           
             }
         }
 
         public HashSet<Move> PossibleMoves { get; } = new HashSet<Move>();
+
+        private void UpdateIsTie(int row, int col, PointStates oldValue, PointStates newValue)
+        {
+            //IsTie = Count == NumCols * NumRows;
+
+            // TODO smarter tie
+            if (newValue != PointStates.None)
+            {
+                this.UpdateLivenessForStone(row, col, newValue);
+                this.UpdateNearbyForStone(row, col, newValue);
+            }
+            else
+            {
+                // this is not used anyway
+                this.UpdateLivenessForRemoval(row, col);
+                this.UpdateNearbyForRemoval(row, col, oldValue);
+            }
+        }
+
 
         private void UpdateIsWin(int row, int col, PointStates stone)
         {
