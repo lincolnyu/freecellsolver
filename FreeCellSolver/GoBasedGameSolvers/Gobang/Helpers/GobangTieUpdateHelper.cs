@@ -53,31 +53,31 @@ namespace GoBasedGameSolvers.Gobang.Helpers
                 }
                 if (bx2 && d[1] < 2)
                 {
-                    state.UpdateNearbySingleDir(row, x2, oldRef, 1, ref d[1], ref d[1]);
+                    state.UpdateNearbySingleDir(row, x2, oldRef, 0, ref d[1], ref r[1]);
                 }
                 if (by1 && d[2] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, col, oldRef, 2, ref d[2], ref d[2]);
+                    state.UpdateNearbySingleDir(y1, col, oldRef, 1, ref d[2], ref r[2]);
                 }
                 if (by2 && d[3] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, col, oldRef, 3, ref d[3], ref d[3]);
+                    state.UpdateNearbySingleDir(y2, col, oldRef, 1, ref d[3], ref r[3]);
                 }
                 if (bx1 && by1 && d[4] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, x1, oldRef, 4, ref d[4], ref d[4]);
+                    state.UpdateNearbySingleDir(y1, x1, oldRef, 2, ref d[4], ref r[4]);
                 }
                 if (bx2 && by2 && d[5] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, x2, oldRef, 5, ref d[5], ref d[5]);
+                    state.UpdateNearbySingleDir(y2, x2, oldRef, 2, ref d[5], ref r[5]);
                 }
                 if (bx2 && by1 && d[6] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, x2, oldRef, 6, ref d[6], ref d[6]);
+                    state.UpdateNearbySingleDir(y1, x2, oldRef, 3, ref d[6], ref r[6]);
                 }
                 if (bx1 && by2 && d[7] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, x1, oldRef, 7, ref d[7], ref d[7]);
+                    state.UpdateNearbySingleDir(y2, x1, oldRef, 3, ref d[7], ref r[7]);
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace GoBasedGameSolvers.Gobang.Helpers
                 {
                     if (bx2)
                     {
-                        var c = state[row, x1];
+                        var c = state[row, x2];
                         if (c != stone && c != PointStates.None)
                         {
                             d2 = i;
@@ -125,7 +125,7 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             }
 
             var l = Math.Min(state.NumToWin,
-                d1 > 0 && d2 > 0 ? d2 - d1 - 1 : state.NumToWin);
+                d1 > 0 && d2 > 0 ? d2 + d1 - 1 : state.NumToWin);
             state.ForceLiveness(row, col, 0, l);
             return l;
         }
@@ -173,7 +173,7 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             }
 
             var l = Math.Min(state.NumToWin,
-                d1 > 0 && d2 > 0 ? d2 - d1 - 1 : state.NumToWin);
+                d1 > 0 && d2 > 0 ? d2 + d1 - 1 : state.NumToWin);
             state.ForceLiveness(row, col, 1, l);
 
             return l;
@@ -226,7 +226,7 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             }
 
             var l = Math.Min(state.NumToWin,
-                d1 > 0 && d2 > 0 ? d2 - d1 - 1 : state.NumToWin);
+                d1 > 0 && d2 > 0 ? d2 + d1 - 1 : state.NumToWin);
             state.ForceLiveness(row, col, 2, l);
             return l;
         }
@@ -277,8 +277,8 @@ namespace GoBasedGameSolvers.Gobang.Helpers
                 }
             }
 
-            var l = state.Liveness[row, col, 3] = Math.Min(state.NumToWin,
-                d1 > 0 && d2 > 0 ? d2 - d1 - 1 : state.NumToWin);
+            var l = Math.Min(state.NumToWin,
+                d1 > 0 && d2 > 0 ? d2 + d1 - 1 : state.NumToWin);
             state.ForceLiveness(row, col, 3, l);
             return l;
         }
@@ -296,6 +296,10 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             if (l == state.NumToWin)
             {
                 state.AliveCount--;
+                if (state.AliveCount == 0 && state.Count > 0)
+                {
+                    state.IsTie = true;
+                }
             }
         }
 
@@ -304,6 +308,10 @@ namespace GoBasedGameSolvers.Gobang.Helpers
             if (l == state.NumToWin)
             {
                 state.AliveCount++;
+                if (state.AliveCount > 0)
+                {
+                    state.IsTie = false;
+                }
             }
         }
 
@@ -328,31 +336,31 @@ namespace GoBasedGameSolvers.Gobang.Helpers
                 }
                 if (bx2 && d[1] < 2)
                 {
-                    state.UpdateNearbySingleDir(row, x2, stone, 1, ref d[1], ref d[1]);
+                    state.UpdateNearbySingleDir(row, x2, stone, 0, ref d[1], ref d[1]);
                 }
                 if (by1 && d[2] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, col, stone, 2, ref d[2], ref d[2]);
+                    state.UpdateNearbySingleDir(y1, col, stone, 1, ref d[2], ref d[2]);
                 }
                 if (by2 && d[3] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, col, stone, 3, ref d[3], ref d[3]);
+                    state.UpdateNearbySingleDir(y2, col, stone, 1, ref d[3], ref d[3]);
                 }
                 if (bx1 && by1 && d[4] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, x1, stone, 4, ref d[4], ref d[4]);
+                    state.UpdateNearbySingleDir(y1, x1, stone, 2, ref d[4], ref d[4]);
                 }
                 if (bx2 && by2 && d[5] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, x2, stone, 5, ref d[5], ref d[5]);
+                    state.UpdateNearbySingleDir(y2, x2, stone, 2, ref d[5], ref d[5]);
                 }
                 if (bx2 && by1 && d[6] < 2)
                 {
-                    state.UpdateNearbySingleDir(y1, x2, stone, 6, ref d[6], ref d[6]);
+                    state.UpdateNearbySingleDir(y1, x2, stone, 3, ref d[6], ref d[6]);
                 }
                 if (bx1 && by2 && d[7] < 2)
                 {
-                    state.UpdateNearbySingleDir(y2, x1, stone, 7, ref d[7], ref d[7]);
+                    state.UpdateNearbySingleDir(y2, x1, stone, 3, ref d[7], ref d[7]);
                 }
             }
         }

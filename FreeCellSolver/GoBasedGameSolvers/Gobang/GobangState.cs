@@ -34,7 +34,7 @@ namespace GoBasedGameSolvers.Gobang
 
         public bool IsTie
         {
-            get; private set;
+            get; set;
         }
 
         public bool IsTerminated => IsWin || IsTie;
@@ -47,30 +47,29 @@ namespace GoBasedGameSolvers.Gobang
             }
             set
             {
-                SetPoint(row, col, NumCols, value);
                 var move = new Move(row, col);
                 if (value == PointStates.None)
                 {
-                    var oldVal = GetPoint(row, col, NumCols);
+                    var oldValue = GetPoint(row, col, NumCols);
+                    SetPoint(row, col, NumCols, value);
+                    Count--;
                     // assuming the removed one is always the one that caused the one
                     // as we don't move any further once either of these terminal
                     // situations is reached
                     IsWin = false;
-                    IsTie = false;
+                    UpdateIsTie(row, col, oldValue, PointStates.None);
                     PossibleMoves.Add(move);
-                    Count--;
                 }
                 else
                 {
-                    // assuming wasn't in win state
                     SetPoint(row, col, NumCols, value);
+                    Count++;
+                    // assuming wasn't in win state
                     UpdateIsWin(row, col, value);
                     UpdateIsTie(row, col, PointStates.None, value);
                     PossibleMoves.Remove(move);
-                    Count++;
                 }
                 // this is done at the end, at the moment there should be no issue
-           
             }
         }
 
@@ -78,8 +77,6 @@ namespace GoBasedGameSolvers.Gobang
 
         private void UpdateIsTie(int row, int col, PointStates oldValue, PointStates newValue)
         {
-            //IsTie = Count == NumCols * NumRows;
-
             // TODO smarter tie
             if (newValue != PointStates.None)
             {
@@ -169,6 +166,18 @@ namespace GoBasedGameSolvers.Gobang
         public void Reset()
         {
             IsWin = false;
+            IsTie = false;
+            AliveCount = 0;
+            for (var i= 0; i < NumRows; i++)
+            {
+                for(var j = 0; j < NumCols; j++)
+                {
+                    for (var k = 0; k < 4; k++)
+                    {
+                        Liveness[i, j, k] = 0;
+                    }
+                }
+            }
             Count = 0;
             Clear();
             ResetPossibleMoves();
