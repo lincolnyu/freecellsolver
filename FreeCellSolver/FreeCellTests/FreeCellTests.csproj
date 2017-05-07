@@ -52,8 +52,13 @@
   <ItemGroup>
     <Compile Include="GobangTieTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RubikTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\qsharp\QSharp\QSharp.Classical.Algorithms\QSharp.Classical.Algorithms.csproj">
+      <Project>{cea2451f-4e90-4fbd-84f9-bdfe71f5c3b3}</Project>
+      <Name>QSharp.Classical.Algorithms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GoBasedGameSolvers\GoBasedGameSolvers.csproj">
       <Project>{62CEC53A-92B0-45DA-8128-7839C80A1D62}</Project>
       <Name>GoBasedGameSolvers</Name>
@@ -61,6 +66,10 @@
     <ProjectReference Include="..\GoBased\GoBased.csproj">
       <Project>{122F54F5-3EC6-490D-8EFE-D599AAB4FEF0}</Project>
       <Name>GoBased</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rubiks\Rubiks.csproj">
+      <Project>{F2B557F5-EF84-4748-98F7-E3A2F4F34F7A}</Project>
+      <Name>Rubiks</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

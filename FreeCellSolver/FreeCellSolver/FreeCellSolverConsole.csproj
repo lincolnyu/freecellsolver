@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\qsharp\QSharp\QSharp.Classical.Algorithms\QSharp.Classical.Algorithms.csproj">
+      <Project>{CEA2451F-4E90-4FBD-84F9-BDFE71F5C3B3}</Project>
+      <Name>QSharp.Classical.Algorithms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CardGameSolvers\CardGameSolvers.csproj">
       <Project>{F9623AD1-A5D3-48AD-BE20-E469589DDA98}</Project>
       <Name>CardGameSolvers</Name>
@@ -65,6 +69,10 @@
     <ProjectReference Include="..\GoBased\GoBased.csproj">
       <Project>{122F54F5-3EC6-490D-8EFE-D599AAB4FEF0}</Project>
       <Name>GoBased</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rubiks\Rubiks.csproj">
+      <Project>{f2b557f5-ef84-4748-98f7-e3a2f4f34f7a}</Project>
+      <Name>Rubiks</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

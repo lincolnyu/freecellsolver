@@ -9,6 +9,9 @@ using GobangSolver = GoBasedGameSolvers.Gobang.Solver;
 using System.Collections.Generic;
 using GoBased;
 using GoBasedGameSolvers.Gobang.Helpers;
+using Rubiks;
+using static Rubiks.RubikCube;
+using static QSharp.Classical.Algorithms.DepthFirstSolverDP;
 
 namespace FreeCellSolverConsole
 {
@@ -146,10 +149,102 @@ namespace FreeCellSolverConsole
             Console.WriteLine($"type = {win.StateType}, winmoves = {win.WinMoves.Count}");
         }
 
+        static string OpToString(Operation op)
+        {
+            var a = (int)op.Angle + op.DiscIndex * 3 + (int)op.DiscAxis * 6;
+            return string.Format("{0,2}", a);
+        }
+
+        static void SolveRubik()
+        {
+            
+            var rubikstr = "120";
+            rubikstr += "   015";
+            rubikstr += "   355";
+            rubikstr += "221203032434";
+            rubikstr += "541322131454";
+            rubikstr += "004021411543";
+            rubikstr += "   545";
+            rubikstr += "   305";
+            rubikstr += "   203";
+            /*
+            var rubikstr = "444";
+            rubikstr += "   444";
+            rubikstr += "   444";
+            rubikstr += "222333000111";
+            rubikstr += "333000111222";
+            rubikstr += "333000111222";
+            rubikstr += "   555";
+            rubikstr += "   555";
+            rubikstr += "   555";
+            */
+            var rubik = new RubikCube(3);
+            rubik.FromString(rubikstr);
+            var s = rubik.ToString();
+            Console.WriteLine(s);
+            var solver = new RubikCubeSolverDP(rubik);
+
+            int count = 0;
+            solver.SolveStep += (dfs, state, type) =>
+            {
+                if (type == SolveStepTypes.Regress /*|| type == SolveStepTypes.HitVisited*/)
+                {
+                    Console.WriteLine(type);
+                }
+
+                if (count++ % 100000 == 0)
+                {
+                  //  foreach (var op in dfs.OperationStack.Reverse())
+                    //{
+                    //    Console.Write(OpToString((Operation)op) + " ");
+                   // }
+                    Console.WriteLine("{0},{1}", dfs.OperationStack.Count, ((RubikCubeSolverDP)dfs).Visited.Count);
+                }
+                //Console.WriteLine("------------------------------");
+                //Console.WriteLine(type);
+                //Console.WriteLine(dfs.LastOperation);
+                //Console.WriteLine(state);
+            };
+#if false
+            solver.Stepped += (v, k, op) =>
+            {
+#if false
+                Console.WriteLine("------------------------------");
+                Console.WriteLine(op);
+                Console.WriteLine(k);
+                Console.ReadKey();
+#else
+                if (k == null)
+                {
+                    //Console.WriteLine("repeating");
+                }
+                /*
+                if (v.VisitedCubeCount % 10000 == 0 && op != null)
+                {
+                    Console.Write(v.VisitedCubeCount);
+                    Console.WriteLine("------------------------------");
+                    Console.WriteLine(k);
+                }*/
+#endif
+            };
+#endif
+            var r = solver.SolveFirst();
+            if (r != null)
+            {
+                Console.WriteLine("Solved");
+            }
+            else
+            {
+                Console.WriteLine("Failed to solve");
+            }
+        }
+        
         static void Main()
         {
-            InteractiveGobang(3,3,3,true);
-            //SolveGobang();
+            //InteractiveGobang(3,3,3,true);
+            ////SolveGobang();
+
+            SolveRubik();
         }
     }
 }
