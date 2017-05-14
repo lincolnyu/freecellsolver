@@ -12,6 +12,7 @@ using GoBasedGameSolvers.Gobang.Helpers;
 using Rubiks;
 using static Rubiks.RubikCube;
 using static QSharp.Classical.Algorithms.DepthFirstSolverDP;
+using static Rubiks.RubikCube.Operation;
 
 namespace FreeCellSolverConsole
 {
@@ -238,13 +239,96 @@ namespace FreeCellSolverConsole
                 Console.WriteLine("Failed to solve");
             }
         }
-        
+
+        static void PlayRubik()
+        {
+            var rubik = new RubikCube(3);
+            Console.WriteLine(rubik);
+            while (true)
+            {
+                Console.Write(">");
+                var opStr = Console.ReadLine();
+                Operation[] ops = null;
+                if (opStr == "reset")
+                {
+                    rubik.ResetToGood();
+                    Console.WriteLine(rubik);
+                    continue;
+                }
+                else if (opStr == "quit")
+                {
+                    break;
+                }
+                else if (string.IsNullOrWhiteSpace(opStr))
+                {
+                    continue;
+                }
+                else if (Enum.TryParse<Singmaster>(opStr, out var op))
+                {
+                    ops = new Operation[] { op };
+                }
+                else if (opStr == "twist")
+                {
+                    ops = new Operation[]
+                    {
+                        Singmaster.B,
+                        Singmaster.Rp,
+                        Singmaster.D2,
+                        Singmaster.R,
+                        Singmaster.Bp,
+                        Singmaster.U2,
+                        Singmaster.B,
+                        Singmaster.Rp,
+                        Singmaster.D2,
+                        Singmaster.R,
+                        Singmaster.Bp,
+                        Singmaster.U2
+                    };
+                }
+                else if (opStr == "flip")
+                {
+                    ops = new Operation[]
+                    {
+                        Singmaster.R,
+                        Singmaster.U,
+                        Singmaster.D,
+                        Singmaster.B2,
+                        Singmaster.U2,
+                        Singmaster.Bp,
+                        Singmaster.U,
+                        Singmaster.B,
+                        Singmaster.U,
+                        Singmaster.B2,
+                        Singmaster.Dp,
+                        Singmaster.Rp,
+                        Singmaster.Up,
+                    };
+                }
+                else
+                {
+                    Console.WriteLine("Unknown operation");
+                    continue;
+                }
+
+                if (ops != null)
+                {
+                    Array.ForEach(ops, o =>
+                    {
+                        rubik.OperateSelf(o);
+                        Console.WriteLine($"{o} ({o.ToSingmaster()})");
+                        Console.WriteLine(rubik);
+                    });
+                }
+            }
+        }
+
         static void Main()
         {
             //InteractiveGobang(3,3,3,true);
             ////SolveGobang();
 
-            SolveRubik();
+            //SolveRubik();
+            PlayRubik();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace FreeCellTests
         public void TestGetNextOperation()
         {
             var op = new Operation { DiscAxis = DiscAxes.X, DiscIndex = 0, Angle = Angles.Forward };
-            var expected = new Operation { DiscAxis = DiscAxes.X, DiscIndex = 0, Angle = Angles.Mirror};
+            var expected = new Operation { DiscAxis = DiscAxes.X, DiscIndex = 0, Angle = Angles.Mirror };
             var actual = op.GetNextOperation(1);
             Assert.IsTrue(ReferenceEquals(op, actual));
             Assert.AreEqual(expected, actual);
@@ -100,7 +100,7 @@ namespace FreeCellTests
             var actual = op.GetPrevOperation(1);
             Assert.IsTrue(ReferenceEquals(op, actual));
             Assert.AreEqual(expected, actual);
-            
+
             expected = new Operation { DiscAxis = DiscAxes.Z, DiscIndex = 1, Angle = Angles.Forward };
             actual = op.GetPrevOperation(1);
             Assert.IsTrue(ReferenceEquals(op, actual));
@@ -175,7 +175,7 @@ namespace FreeCellTests
             Assert.AreEqual(op2.QuickNegate(), result2[0]);
             Assert.AreEqual(op1.QuickNegate(), result2[1]);
         }
-        
+
         // depth first dp is stupid
         /*[TestMethod]*/
         public void TestSolveDP()
@@ -286,6 +286,63 @@ namespace FreeCellTests
                 }
                 Assert.IsTrue(rubik.IsDone());
 #endif
+            }
+        }
+
+        [TestMethod]
+        public void TestSingmaster()
+        {
+            var orig = GetResetRubik();
+            var rubik = orig.Clone();
+            rubik.OperateSelf(Singmaster.B);
+			rubik.OperateSelf(Singmaster.Bp);
+			Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.F);
+            rubik.OperateSelf(Singmaster.Fp);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.U);
+            rubik.OperateSelf(Singmaster.Up);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.D);
+            rubik.OperateSelf(Singmaster.Dp);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.L);
+            rubik.OperateSelf(Singmaster.Lp);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.R);
+            rubik.OperateSelf(Singmaster.Rp);
+            Assert.AreEqual(rubik, orig);
+
+            rubik.OperateSelf(Singmaster.B2);
+            rubik.OperateSelf(Singmaster.B);
+            rubik.OperateSelf(Singmaster.B);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.F2);
+            rubik.OperateSelf(Singmaster.F);
+            rubik.OperateSelf(Singmaster.F);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.U2);
+            rubik.OperateSelf(Singmaster.U);
+            rubik.OperateSelf(Singmaster.U);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.D2);
+            rubik.OperateSelf(Singmaster.D);
+            rubik.OperateSelf(Singmaster.D);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.L2);
+            rubik.OperateSelf(Singmaster.L);
+            rubik.OperateSelf(Singmaster.L);
+            Assert.AreEqual(rubik, orig);
+            rubik.OperateSelf(Singmaster.R2);
+            rubik.OperateSelf(Singmaster.R);
+            rubik.OperateSelf(Singmaster.R);
+            Assert.AreEqual(rubik, orig);
+
+            foreach (var v in Enum.GetValues(typeof(Singmaster)).Cast<Singmaster>())
+            {
+                var op = new Operation(v);
+                var v2 = op.ToSingmaster();
+                Assert.AreEqual(v, v2);
             }
         }
     }

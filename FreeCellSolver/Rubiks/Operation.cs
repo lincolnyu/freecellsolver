@@ -77,7 +77,7 @@ namespace Rubiks
                 => op.ToSingmaster();
 
             public static implicit operator Operation(Singmaster sm)
-                => new Operation(sm);
+                => new Operation(sm);   
 
             public Singmaster ToSingmaster()
             {
@@ -109,11 +109,11 @@ namespace Rubiks
                         switch (Angle)
                         {
                             case Angles.Forward:
-                                return DiscIndex == 1 ? Singmaster.B : Singmaster.Up;
+                                return DiscIndex == 1 ? Singmaster.D : Singmaster.Up;
                             case Angles.Backward:
-                                return DiscIndex == 1 ? Singmaster.Bp : Singmaster.U;
+                                return DiscIndex == 1 ? Singmaster.Dp : Singmaster.U;
                             case Angles.Mirror:
-                                return DiscIndex == 1 ? Singmaster.B2 : Singmaster.U2;
+                                return DiscIndex == 1 ? Singmaster.D2 : Singmaster.U2;
                         }
                         break;
                 }

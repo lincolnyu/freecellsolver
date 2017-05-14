@@ -323,7 +323,7 @@ namespace Rubiks
                         break;
                 }
             }
-            else if (op.DiscIndex == Size - 1)
+            else if (op.DiscIndex == Size - 2)
             {
                 switch (op.DiscAxis)
                 {
@@ -354,14 +354,14 @@ namespace Rubiks
 
         private void RotateSurfaceForward(int s)
         {
-            Permutate(ref _surfaces[s, 0, 0], ref _surfaces[s, 2, 0], ref _surfaces[s, 2, 2], ref _surfaces[s, 0, 2]);
-            Permutate(ref _surfaces[s, 0, 1], ref _surfaces[s, 1, 0], ref _surfaces[s, 2, 1], ref _surfaces[s, 1, 2]);
+            Permutate(ref _surfaces[s, 0, 0], ref _surfaces[s, 0, 2], ref _surfaces[s, 2, 2], ref _surfaces[s, 2, 0]);
+            Permutate(ref _surfaces[s, 0, 1], ref _surfaces[s, 1, 2], ref _surfaces[s, 2, 1], ref _surfaces[s, 1, 0]);
         }
 
         private void RotateSurfaceBackward(int s)
         {
-            Permutate(ref _surfaces[s, 0, 0], ref _surfaces[s, 0, 2], ref _surfaces[s, 2, 2], ref _surfaces[s, 2, 0]);
-            Permutate(ref _surfaces[s, 0, 1], ref _surfaces[s, 1, 2], ref _surfaces[s, 2, 1], ref _surfaces[s, 1, 0]);
+            Permutate(ref _surfaces[s, 0, 0], ref _surfaces[s, 2, 0], ref _surfaces[s, 2, 2], ref _surfaces[s, 0, 2]);
+            Permutate(ref _surfaces[s, 0, 1], ref _surfaces[s, 1, 0], ref _surfaces[s, 2, 1], ref _surfaces[s, 1, 2]);
         }
 
         private void MirrorSurface(int s)
