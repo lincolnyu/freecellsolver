@@ -304,6 +304,21 @@ namespace FreeCellSolverConsole
                         Singmaster.Up,
                     };
                 }
+                else if (opStr == "3cycle")
+                {
+                    ops = new Operation[]
+                    {
+                        Singmaster.R2,
+                        Singmaster.Up,
+                        Singmaster.F,
+                        Singmaster.Bp,
+                        Singmaster.R2,
+                        Singmaster.Fp,
+                        Singmaster.B,
+                        Singmaster.Up,
+                        Singmaster.R2,
+                    };
+                }
                 else
                 {
                     Console.WriteLine("Unknown operation");
